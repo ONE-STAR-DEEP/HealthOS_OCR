@@ -5,14 +5,21 @@ import fitz  # PyMuPDF
 import pytesseract
 from PIL import Image
 import io
+import uvicorn
 import os
 from dotenv import load_dotenv
+import platform
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+if platform.system() == "Windows":
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 load_dotenv()
 api_key = os.getenv("GEMINI_API")
 app = FastAPI()
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Read port from env var, default 8000 for local
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 
 # Enable CORS
