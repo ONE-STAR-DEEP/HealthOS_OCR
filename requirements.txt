@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+requests
+pymupdf
+pytesseract
+pillow
+python-dotenv
