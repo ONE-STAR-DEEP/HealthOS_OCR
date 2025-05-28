@@ -15,6 +15,8 @@ if platform.system() == "Windows":
 
 load_dotenv()
 api_key = os.getenv("GEMINI_API")
+APPWRITE_PROJECT_ID = os.getenv("APPWRITE_PROJECT_ID")
+APPWRITE_API_KEY = os.getenv("APPWRITE_API_KEY")
 app = FastAPI()
 
 if __name__ == "__main__":
@@ -33,7 +35,12 @@ app.add_middleware(
 
 def extract_text_from_pdf(url: str) -> str:
     try:
-        response = requests.get(url)
+        headers = {
+        "X-Appwrite-Project": APPWRITE_PROJECT_ID,
+        "X-Appwrite-Key": APPWRITE_API_KEY,
+        }
+        
+        response = requests.get(url, headers=headers, stream=True)
         response.raise_for_status()  # Raises HTTPError if status code is 4xx/5xx
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=400, detail=f"Failed to download PDF: {e}")
@@ -105,6 +112,7 @@ def parse_text_to_fields(text: str) -> dict:
 @app.get("/extract-text")
 def extract_report(file_url: str = Query(...)):
     try:
+        
         text = extract_text_from_pdf(file_url)
         structured_data = parse_text_to_fields(text)
         return structured_data
