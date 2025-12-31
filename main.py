@@ -99,7 +99,7 @@ def parse_text_to_fields(text: str) -> dict:
     """
 
     response = requests.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
         headers={"Content-Type": "application/json"},
         params={"key": api_key},
         json={"contents": [{"parts": [{"text": prompt}]}]}
